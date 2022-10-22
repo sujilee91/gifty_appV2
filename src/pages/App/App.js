@@ -1,3 +1,4 @@
+import React from 'react'
 import UserCard from '../../components/UserCard'
 import DashGrid from '../../components/DashGrid'
 import recieve from '../../img/recieve.png'
@@ -9,12 +10,29 @@ const dashList = [
   { name: 'Sent Gifts', image: sent },
 ]
 
+const FAM = ['Dave', 'Diane', 'Connor', 'Cailey', 'Nino', 'SuJi', 'Lilly']
+
 const App = () => {
+  var userName = ''
+  // if (localStorage.getItem('name')) {
+  //   userName = localStorage.getItem('name')
+  // } else {
+  //   localStorage.setItem('name')
+  // }
+
   return (
     <div className="App">
       <header className="App-header"></header>
-      <UserCard />
-      <DashGrid dashItems={dashList} />
+      {}
+      {FAM.map((fam) => {
+        return (
+          <div key={fam}>
+            <UserCard user={fam} />
+          </div>
+        )
+      })}
+
+      {/* <DashGrid dashItems={dashList} /> */}
     </div>
   )
 }

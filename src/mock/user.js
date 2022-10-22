@@ -1,5 +1,5 @@
 import Item from './item'
-import Group from './group'
+import Group from './event'
 const User = {
   id: String,
   first_name: String,
