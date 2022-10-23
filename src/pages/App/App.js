@@ -114,7 +114,7 @@ const App = () => {
           {usersList && currentUser && (
             <UserTab
               users={usersList}
-              currentUserPurchased={currentUser.purchasedItem}
+              currentUserPurchased={currentUser?.purchasedItem}
             />
           )}
         </CardsWrapper>

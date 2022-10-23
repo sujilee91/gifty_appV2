@@ -79,6 +79,14 @@ const UserTab = ({ users, currentUserPurchased }) => {
     if (users && !selectedUser) setSelectedUser(users[0])
   }, [users])
 
+  const purchasedItemsByCurrentUser = () => {
+    if (currentUserPurchased) {
+      return Object.keys(currentUserPurchased[selectedUser.id])
+    }
+
+    return null
+  }
+
   return (
     <div>
       <TabWrapper>
@@ -112,10 +120,6 @@ const UserTab = ({ users, currentUserPurchased }) => {
             {selectedUser?.items ? (
               <>
                 {Object.keys(selectedUser?.items).map((item) => {
-                  const purchasedItemsByCurrentUser = Object.keys(
-                    currentUserPurchased[selectedUser.id],
-                  )
-                  console.log(purchasedItemsByCurrentUser)
                   const {
                     name,
                     description,
@@ -145,7 +149,7 @@ const UserTab = ({ users, currentUserPurchased }) => {
                           }}
                           disabled={
                             purchased &&
-                            !purchasedItemsByCurrentUser.includes(`${id}`)
+                            !purchasedItemsByCurrentUser()?.includes(`${id}`)
                           }
                         />
                       </td>
