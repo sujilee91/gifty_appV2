@@ -73,9 +73,8 @@ const TabButton = styled.button`
 const Row = styled.tr`
   padding: 5px;
 `
-const UserTab = ({ users }) => {
+const UserTab = ({ users, currentUserPurchased }) => {
   const [selectedUser, setSelectedUser] = useState()
-
   useEffect(() => {
     if (users && !selectedUser) setSelectedUser(users[0])
   }, [users])
@@ -107,13 +106,27 @@ const UserTab = ({ users }) => {
             </tr>
           </thead>
           <tbody>
+            {/* Purchased => purchased by current user => editable / IF NOT => un-editable
+                How to tell? current user should have purchased Item list
+            */}
             {selectedUser?.items ? (
               <>
                 {Object.keys(selectedUser?.items).map((item) => {
-                  const { name, description, link, price, detail, purchased } =
-                    selectedUser.items[item]
+                  const purchasedItemsByCurrentUser = Object.keys(
+                    currentUserPurchased[selectedUser.id],
+                  )
+                  console.log(purchasedItemsByCurrentUser)
+                  const {
+                    name,
+                    description,
+                    link,
+                    price,
+                    detail,
+                    purchased,
+                    id,
+                  } = selectedUser.items[item]
                   return (
-                    <Row key={item.id}>
+                    <Row key={id}>
                       <td>
                         {/* CHECKER FOR INCLUDE HTTPS */}
                         <a href={`https://${link}`} target="_blank">
@@ -124,7 +137,17 @@ const UserTab = ({ users }) => {
                       <td>{name ? name : 'N/A'}</td>
                       <td>{detail ? detail : 'N/A'}</td>
                       <td>
-                        <checkbox />
+                        <input
+                          type="checkbox"
+                          checked={purchased}
+                          onChange={() => {
+                            console.log('clicked')
+                          }}
+                          disabled={
+                            purchased &&
+                            !purchasedItemsByCurrentUser.includes(`${id}`)
+                          }
+                        />
                       </td>
                     </Row>
                   )

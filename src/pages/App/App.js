@@ -50,13 +50,16 @@ const App = () => {
   const [openModal, setOpenModal] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
   const [usersList, setUsersList] = useState([])
-  const { data, error, loading, useAddItem } = useGetUsers(setCurrentUser)
+  const { data, error, loading, useAddItem, useRemoveItem } =
+    useGetUsers(setCurrentUser)
   const userCode = localStorage.getItem('code')
 
   useEffect(() => {
     if (!userCode) {
       setOpenModal(true)
     }
+
+    if (!data) return
 
     if (currentUser && data) {
       const newData = { ...data }
@@ -71,12 +74,10 @@ const App = () => {
         (user) => `${user.code}` === userCode,
       )
 
-      console.log(data, 'loded data')
       if (foundUser) {
         setCurrentUser(foundUser)
         const newData = { ...data }
         delete newData[foundUser.id]
-        console.log(newData, 'newdata2')
 
         setUsersList(Object.values(newData))
       }
@@ -96,7 +97,11 @@ const App = () => {
       ) : (
         <CardsWrapper>
           {currentUser && (
-            <CurrentUser user={currentUser} onAddItem={useAddItem} />
+            <CurrentUser
+              user={currentUser}
+              onAddItem={useAddItem}
+              onRemoveItem={useRemoveItem}
+            />
           )}
 
           {/* {usersList.map((user) => {
@@ -106,7 +111,12 @@ const App = () => {
               </div>
             )
           })} */}
-          {usersList && <UserTab users={usersList} />}
+          {usersList && currentUser && (
+            <UserTab
+              users={usersList}
+              currentUserPurchased={currentUser.purchasedItem}
+            />
+          )}
         </CardsWrapper>
       )}
 

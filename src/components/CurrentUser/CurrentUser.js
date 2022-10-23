@@ -42,7 +42,7 @@ const ButtonWrapper = styled.div`
 //   return update(ref(db), updates)
 // }
 
-const CurrenetUser = ({ user, onAddItem }) => {
+const CurrenetUser = ({ user, onAddItem, onRemoveItem }) => {
   const [addNew, setAddNew] = useState(false)
   const [item, setItem] = useState()
 
@@ -56,6 +56,7 @@ const CurrenetUser = ({ user, onAddItem }) => {
         item={item}
         setItem={setItem}
         isCurrentUser={true}
+        onRemoveItem={onRemoveItem}
       />
       {addNew ? (
         <ButtonWrapper>

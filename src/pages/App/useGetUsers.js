@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getDatabase, ref, child, get, set } from 'firebase/database'
+import { getDatabase, ref, child, get, set, remove } from 'firebase/database'
 
 import { db } from '../../firebase'
 
@@ -10,11 +10,14 @@ export const useGetUsers = (initializeUser) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const getUsers = () =>
-    get(child(dbRef, 'users'))
+  const fetchNewData = () => {
+    const dbRef = ref(getDatabase())
+
+    return get(child(dbRef, 'users'))
       .then((snapshot) => {
         if (snapshot.exists()) {
           setData(snapshot.val())
+          initializeUser(null)
         } else {
           console.log('No data available')
         }
@@ -25,10 +28,10 @@ export const useGetUsers = (initializeUser) => {
       .finally(() => {
         setLoading(false)
       })
+  }
 
   useEffect(() => {
-    getUsers()
-    setLoading(true)
+    fetchNewData()
   }, [])
 
   const useAddItem = (userId, item) => {
@@ -40,21 +43,47 @@ export const useGetUsers = (initializeUser) => {
       id: id,
     })
       .then(() => {
-        get(child(dbRef, 'users'))
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              console.log(snapshot.val(), 'newDAta')
-              setData(snapshot.val())
-              initializeUser(null)
-            } else {
-              console.log('No data available')
-            }
+        fetchNewData()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  const useRemoveItem = (userId, itemId) => {
+    const db = getDatabase()
+    setLoading(true)
+    remove(ref(db, 'users/' + userId + '/items/' + itemId))
+      .then(() => {
+        fetchNewData()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  const useCheckItem = (checkedUserId, ownerId, itemId) => {
+    const db = getDatabase()
+    setLoading(true)
+    const id = Date.now()
+    set(ref(db, 'users/' + ownerId + '/items/' + itemId), {
+      purchased: true,
+    })
+      .then(() => {
+        set(ref(db, 'users/' + checkedUserId + '/purchased/' + itemId), {
+          [itemId]: itemId,
+        })
+          .then(() => {
+            fetchNewData()
           })
           .catch((error) => {
             console.error(error)
-          })
-          .finally(() => {
-            setLoading(false)
           })
       })
       .catch((error) => {
@@ -64,5 +93,6 @@ export const useGetUsers = (initializeUser) => {
         setLoading(false)
       })
   }
-  return { data, loading, error, useAddItem }
+
+  return { data, loading, error, useAddItem, useRemoveItem, useCheckItem }
 }

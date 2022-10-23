@@ -1,7 +1,14 @@
 import React, { useRef } from 'react'
 import { Table, THead, InputField, TextArea } from './styles'
 
-const CardTable = ({ user, addNew, item, setItem, isCurrentUser }) => {
+const CardTable = ({
+  user,
+  addNew,
+  item,
+  setItem,
+  isCurrentUser,
+  onRemoveItem,
+}) => {
   const linkRef = useRef(null)
   const priceRef = useRef(null)
   const nameRef = useRef(null)
@@ -15,17 +22,17 @@ const CardTable = ({ user, addNew, item, setItem, isCurrentUser }) => {
           <THead width={10}>Price</THead>
           <THead width={25}>Name</THead>
           <THead width={40}>Detail</THead>
-          <THead width={5}>{isCurrentUser ? 'Delete' : 'Purchased'}</THead>
+          <THead width={5}>Delete</THead>
         </tr>
       </thead>
       <tbody>
         {user.items ? (
           <>
-            {Object.keys(user?.items).map((item) => {
-              const { name, description, link, price, detail, purchased } =
-                user.items[item]
+            {Object.keys(user?.items).map((userItem) => {
+              const { name, description, link, price, detail, purchased, id } =
+                user.items[userItem]
               return (
-                <tr key={item}>
+                <tr key={id}>
                   <td>
                     {/* CHECKER FOR INCLUDE HTTPS */}
                     <a href={`https://${link}`} target="_blank">
@@ -35,7 +42,11 @@ const CardTable = ({ user, addNew, item, setItem, isCurrentUser }) => {
                   <td>{price ? price : 'N/A'}</td>
                   <td>{name ? name : 'N/A'}</td>
                   <td>{detail ? detail : 'N/A'}</td>
-                  <td>{isCurrentUser ? <button> X </button> : <checkbox />}</td>
+                  <td>
+                    <button onClick={() => onRemoveItem(user.id, id)}>
+                      X{' '}
+                    </button>{' '}
+                  </td>
                 </tr>
               )
             })}
