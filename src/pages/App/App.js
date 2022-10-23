@@ -50,8 +50,14 @@ const App = () => {
   const [openModal, setOpenModal] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
   const [usersList, setUsersList] = useState([])
-  const { data, error, loading, useAddItem, useRemoveItem } =
-    useGetUsers(setCurrentUser)
+  const {
+    data,
+    error,
+    loading,
+    useAddItem,
+    useRemoveItem,
+    usePurchaseCheckItem,
+  } = useGetUsers(setCurrentUser)
   const userCode = localStorage.getItem('code')
 
   useEffect(() => {
@@ -115,6 +121,8 @@ const App = () => {
             <UserTab
               users={usersList}
               currentUserPurchased={currentUser?.purchasedItem}
+              onPurchase={usePurchaseCheckItem}
+              currentUserId={currentUser?.id}
             />
           )}
         </CardsWrapper>

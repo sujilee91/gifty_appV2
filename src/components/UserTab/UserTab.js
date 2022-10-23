@@ -73,13 +73,19 @@ const TabButton = styled.button`
 const Row = styled.tr`
   padding: 5px;
 `
-const UserTab = ({ users, currentUserPurchased }) => {
+const UserTab = ({
+  users,
+  currentUserPurchased,
+  onPurchase,
+  currentUserId,
+}) => {
   const [selectedUser, setSelectedUser] = useState()
   useEffect(() => {
     if (users && !selectedUser) setSelectedUser(users[0])
   }, [users])
 
   const purchasedItemsByCurrentUser = () => {
+    console.log(Object.keys(currentUserPurchased[selectedUser.id]), 'cp')
     if (currentUserPurchased) {
       return Object.keys(currentUserPurchased[selectedUser.id])
     }
@@ -129,6 +135,10 @@ const UserTab = ({ users, currentUserPurchased }) => {
                     purchased,
                     id,
                   } = selectedUser.items[item]
+                  console.log(
+                    purchasedItemsByCurrentUser()?.includes(`${id}`),
+                    id,
+                  )
                   return (
                     <Row key={id}>
                       <td>
@@ -145,7 +155,7 @@ const UserTab = ({ users, currentUserPurchased }) => {
                           type="checkbox"
                           checked={purchased}
                           onChange={() => {
-                            console.log('clicked')
+                            onPurchase(currentUserId, selectedUser.id, id)
                           }}
                           disabled={
                             purchased &&

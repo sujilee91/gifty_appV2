@@ -68,7 +68,7 @@ export const useGetUsers = (initializeUser) => {
       })
   }
 
-  const useCheckItem = (checkedUserId, ownerId, itemId) => {
+  const usePurchaseCheckItem = (currentUserId, ownerId, itemId) => {
     const db = getDatabase()
     setLoading(true)
     const id = Date.now()
@@ -76,8 +76,8 @@ export const useGetUsers = (initializeUser) => {
       purchased: true,
     })
       .then(() => {
-        set(ref(db, 'users/' + checkedUserId + '/purchased/' + itemId), {
-          [itemId]: itemId,
+        set(ref(db, 'users/' + currentUserId + '/purchasedItem/' + ownerId), {
+          [itemId]: '',
         })
           .then(() => {
             fetchNewData()
@@ -94,5 +94,12 @@ export const useGetUsers = (initializeUser) => {
       })
   }
 
-  return { data, loading, error, useAddItem, useRemoveItem, useCheckItem }
+  return {
+    data,
+    loading,
+    error,
+    useAddItem,
+    useRemoveItem,
+    usePurchaseCheckItem,
+  }
 }
