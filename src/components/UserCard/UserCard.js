@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Card,
   ImgSection,
@@ -6,52 +6,18 @@ import {
   Name,
   CardTitle,
   CardDetails,
-  CardTable,
   THead,
 } from './styles'
+import CardTable from '../CardTable'
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite'
 
 const UserCard = ({ user }) => {
-  // return (
-  //   <Card>
-  //     <ImgSection img={'babc'} />
-  //     <UserInfoSection>
-  //       <Name>Name</Name>
-  //       <br />
-  //       <span>user id</span>
-  //       <br />
-  //       <span>folowwer</span>
-  //       <br />
-  //       <span>following</span>
-  //       <br />
-  //     </UserInfoSection>
-
-  //   </Card>
-  // )
-
+  const [newItem, setNewItem] = useState({})
   return (
     <Card>
-      <CardTitle>{user}</CardTitle>
+      <CardTitle>{user.name}</CardTitle>
       <CardDetails>
-        <CardTable>
-          <thead>
-            <tr>
-              <THead width={5}>Link</THead>
-              <THead width={10}>Price</THead>
-              <THead width={25}>Name</THead>
-              <THead width={40}>Detail</THead>
-              <THead width={5}>Purchased</THead>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-              <td>Germany</td>
-              <td>V</td>
-            </tr>
-          </tbody>
-        </CardTable>
+        <CardTable user={user} />
       </CardDetails>
     </Card>
   )

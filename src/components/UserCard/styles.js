@@ -5,8 +5,7 @@ export const Card = styled.details`
   border-radius: 5px;
   display: flex;
   align-items: center;
-
-  margin: 30px 20px;
+  margin: 30px 0px;
 `
 
 export const ImgSection = styled.img`

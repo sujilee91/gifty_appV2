@@ -1,5 +1,3 @@
 import css from 'styled-component'
 
-export const Div = {
-  
-}
+export const App = {}
