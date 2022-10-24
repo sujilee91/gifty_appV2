@@ -9,6 +9,8 @@ export const THead = styled.th`
   text-align: left;
   background-color: #dddddd;
   width: ${({ width }) => `${width}%`};
+  padding: 5px;
+  font-weight: 500;
 `
 
 export const NameCol = styled.th`
@@ -18,7 +20,6 @@ export const NameCol = styled.th`
 
 export const InputField = styled.input`
   width: 90%;
-  font-size: 25px;
 `
 
 export const TextArea = styled.textarea`
@@ -33,13 +34,13 @@ const TabWrapper = styled.div`
 
 const TabContent = styled.div`
   padding: 20px;
-  border-left: 1px solid blue;
-  border-right: 1px solid blue;
-  border-bottom: 1px solid blue;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-left: 2px solid #3ab796;
+  border-right: 2px solid #3ab796;
+  border-bottom: 2px solid #3ab796;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 
-  min-height: 50vh;
+  min-height: 25vh;
 `
 
 const TabButton = styled.button`
@@ -49,49 +50,72 @@ const TabButton = styled.button`
   vertical-align: middle;
   overflow: hidden;
   text-decoration: none;
-  color: inherit;
+  color: #3ab796;
   background-color: white;
   text-align: center;
   cursor: pointer;
   white-space: nowrap;
   font-size: 20px;
   width: 100%;
-
-  border: 1px solid blue;
-
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
+  background-color: white;
+  border: 2px solid #3ab796;
+  border-radius: unset;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-size: 18px;
 
   ${({ selected }) =>
     selected &&
     `
+    font-size: 20px;
+    font-weight: bolder;
     border-bottom: none;
-    color: blue;
+    color: white;
+    background-color: #3ab796;
 `}
 `
+const THeadRow = styled.tr`
+  th:first-child {
+    border-top-left-radius: 4px;
+  }
 
+  th:last-child {
+    border-top-right-radius: 4px;
+  }
+`
 const Row = styled.tr`
   padding: 5px;
+  td {
+    padding: 5px;
+  }
+
+  td:last-child {
+    text-align: center;
+    input {
+      width: 20px;
+    }
+
+    input
+  }
 `
 const UserTab = ({
   users,
-  currentUserPurchased,
+  currentUserPurchasedItem,
   onPurchase,
   currentUserId,
+  onUndoPurchase,
+  selectedUser,
+  setSelectedUser,
 }) => {
-  const [selectedUser, setSelectedUser] = useState()
-  useEffect(() => {
-    if (users && !selectedUser) setSelectedUser(users[0])
-  }, [users])
-
   const purchasedItemsByCurrentUser = () => {
-    console.log(Object.keys(currentUserPurchased[selectedUser.id]), 'cp')
-    if (currentUserPurchased) {
-      return Object.keys(currentUserPurchased[selectedUser.id])
+    if (currentUserPurchasedItem) {
+      return Object.keys(currentUserPurchasedItem[selectedUser.id])
     }
 
     return null
   }
+
+  if (!selectedUser) return
 
   return (
     <div>
@@ -111,13 +135,13 @@ const UserTab = ({
       <TabContent>
         <Table>
           <thead>
-            <tr>
+            <THeadRow>
               <THead width={5}>Link</THead>
               <THead width={10}>Price</THead>
               <THead width={25}>Name</THead>
               <THead width={40}>Detail</THead>
               <THead width={5}>Purchased</THead>
-            </tr>
+            </THeadRow>
           </thead>
           <tbody>
             {/* Purchased => purchased by current user => editable / IF NOT => un-editable
@@ -135,10 +159,6 @@ const UserTab = ({
                     purchased,
                     id,
                   } = selectedUser.items[item]
-                  console.log(
-                    purchasedItemsByCurrentUser()?.includes(`${id}`),
-                    id,
-                  )
                   return (
                     <Row key={id}>
                       <td>
@@ -151,17 +171,33 @@ const UserTab = ({
                       <td>{name ? name : 'N/A'}</td>
                       <td>{detail ? detail : 'N/A'}</td>
                       <td>
-                        <input
-                          type="checkbox"
-                          checked={purchased}
-                          onChange={() => {
-                            onPurchase(currentUserId, selectedUser.id, id)
-                          }}
-                          disabled={
-                            purchased &&
-                            !purchasedItemsByCurrentUser()?.includes(`${id}`)
-                          }
-                        />
+                        {purchased ? (
+                          !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
+                            <button disabled onClick={() => null}>
+                              Taken!
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                onUndoPurchase(
+                                  currentUserId,
+                                  selectedUser.id,
+                                  id,
+                                )
+                              }
+                            >
+                              Undo Purchase
+                            </button>
+                          )
+                        ) : (
+                          <button
+                            onClick={() =>
+                              onPurchase(currentUserId, selectedUser.id, id)
+                            }
+                          >
+                            Purchased
+                          </button>
+                        )}
                       </td>
                     </Row>
                   )

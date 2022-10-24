@@ -1,91 +1,130 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import CardTable from '../CardTable'
-import { getDatabase, ref, child, push, update } from 'firebase/database'
-
-const MyList = styled.div`
-  padding-bottom: 10px;
+import { MdExpandLess, MdExpandMore } from 'react-icons/md'
+const Button = styled.button`
+  padding: 10px 15px;
+  font-weight: bolder;
 `
-const AddNewButton = styled.button`
-  text-decoration: none;
-  appearance: none;
-  color: green;
+
+const AddNewButton = styled(Button)`
   padding: 10px;
-  border-radius: 3px;
-  border: 1px solid green;
-  cursor: pointer;
-  margin-top: 15px;
+  background-color: #007658;
+  border: 2px solid #007658;
+  color: white;
+  width: 100%;
+  margin-top: 20px;
 `
 
 const ButtonWrapper = styled.div`
   display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 `
 
-// function writeNewPost(items) {
-//   const db = getDatabase()
+const SaveButton = styled.button`
+  width: 20%;
+`
+const CancelButton = styled.button`
+  background-color: white;
+  border: 2px solid #ed5a6a;
+  color: #ed5a6a;
+  padding: 10px 15px;
+  width: 10%;
+  margin-left: 20px;
+`
 
-//   const itemData = {
-//     name: 'item1',
-//     link: 'www.sujilee.ca',
-//     price: '10',
-//     description: 'abcd',
-//     purchased: false,
-//   }
+const CardWrapper = styled.div`
+  max-height: 20vh;
+  overflow-y: auto;
+`
 
-//   // Get a key for a new Post.
-//   const newPostKey = push(child(ref(db), 'posts')).key
+const Card = styled.div`
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0px;
+`
 
-//   // Write the new post's data simultaneously in the posts list and the user's post list.
-//   const updates = {}
-//   updates['/users/0006/items/6002'] = itemData
+const CardTitle = styled.div`
+  padding: 0 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  ::marker {
+    display: none;
+  }
+`
 
-//   return update(ref(db), updates)
-// }
+const CardContent = styled.div`
+  padding: 20px;
+  display: ${({ open }) => (open ? 'block' : 'none')};
+`
 
-const CurrenetUser = ({ user, onAddItem, onRemoveItem }) => {
+const CurrenetUser = ({
+  user,
+  onAddItem,
+  onRemoveItem,
+  setOpenModal,
+  setCurrentUser,
+}) => {
   const [addNew, setAddNew] = useState(false)
   const [item, setItem] = useState()
+  const [open, setOpen] = useState(true)
 
   return (
-    <MyList>
-      <h3>Hi, {user.name}!</h3>
-      <CardTable
-        user={user}
-        addNew={addNew}
-        setAddNew={setAddNew}
-        item={item}
-        setItem={setItem}
-        isCurrentUser={true}
-        onRemoveItem={onRemoveItem}
-      />
-      {addNew ? (
-        <ButtonWrapper>
-          <AddNewButton
-            onClick={() => {
-              if (item) {
-                onAddItem(user.id, item)
-                setItem(null)
+    <Card>
+      <CardTitle onClick={() => setOpen(!open)}>
+        <h1>Your Wishlist</h1>
+        {open ? (
+          <MdExpandLess color="#007658" size="30px" />
+        ) : (
+          <MdExpandMore color="#007658" size="30px" />
+        )}
+      </CardTitle>
+      <CardContent open={open}>
+        <CardWrapper>
+          <CardTable
+            user={user}
+            addNew={addNew}
+            setAddNew={setAddNew}
+            item={item}
+            setItem={setItem}
+            isCurrentUser={true}
+            onRemoveItem={onRemoveItem}
+          />
+        </CardWrapper>
+        {addNew ? (
+          <ButtonWrapper>
+            <SaveButton
+              onClick={() => {
+                if (item) {
+                  onAddItem(user.id, item)
+                  setItem(null)
+                  setAddNew(false)
+                }
+              }}
+            >
+              Save
+            </SaveButton>
+            <CancelButton
+              onClick={() => {
                 setAddNew(false)
-              }
-            }}
-          >
-            Save
+                setItem(null)
+              }}
+            >
+              Cancel
+            </CancelButton>
+          </ButtonWrapper>
+        ) : (
+          <AddNewButton onClick={() => setAddNew(true)}>
+            Add New Item
           </AddNewButton>
-          <AddNewButton
-            onClick={() => {
-              setAddNew(false)
-              setItem(null)
-            }}
-          >
-            Cancel
-          </AddNewButton>
-        </ButtonWrapper>
-      ) : (
-        <AddNewButton onClick={() => setAddNew(true)}>
-          Add New Item
-        </AddNewButton>
-      )}
-    </MyList>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 

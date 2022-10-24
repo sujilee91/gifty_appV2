@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getDatabase, ref, child, get, set, remove } from 'firebase/database'
 
 import { db } from '../../firebase'
@@ -24,6 +24,7 @@ export const useGetUsers = (initializeUser) => {
       })
       .catch((error) => {
         console.error(error)
+        setError(error)
       })
       .finally(() => {
         setLoading(false)
@@ -46,7 +47,7 @@ export const useGetUsers = (initializeUser) => {
         fetchNewData()
       })
       .catch((error) => {
-        console.error(error)
+        setError(error)
       })
       .finally(() => {
         setLoading(false)
@@ -61,7 +62,7 @@ export const useGetUsers = (initializeUser) => {
         fetchNewData()
       })
       .catch((error) => {
-        console.error(error)
+        setError(error)
       })
       .finally(() => {
         setLoading(false)
@@ -72,9 +73,7 @@ export const useGetUsers = (initializeUser) => {
     const db = getDatabase()
     setLoading(true)
     const id = Date.now()
-    set(ref(db, 'users/' + ownerId + '/items/' + itemId), {
-      purchased: true,
-    })
+    set(ref(db, 'users/' + ownerId + '/items/' + itemId + '/purchased'), true)
       .then(() => {
         set(ref(db, 'users/' + currentUserId + '/purchasedItem/' + ownerId), {
           [itemId]: '',
@@ -83,11 +82,44 @@ export const useGetUsers = (initializeUser) => {
             fetchNewData()
           })
           .catch((error) => {
-            console.error(error)
+            setError(error)
           })
       })
       .catch((error) => {
-        console.error(error)
+        setError(error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  const useUndoPurchaseCheckItem = (currentUserId, ownerId, itemId) => {
+    const db = getDatabase()
+    setLoading(true)
+    //set purchsed to false on member's list
+    set(ref(db, 'users/' + ownerId + '/items/' + itemId + '/purchased'), false)
+      .then(() => {
+        //remove purchased item on current users list
+        remove(
+          ref(
+            db,
+            'users/' +
+              currentUserId +
+              '/purchasedItem/' +
+              ownerId +
+              '/' +
+              itemId,
+          ),
+        )
+          .then(() => {
+            fetchNewData()
+          })
+          .catch((error) => {
+            setError(error)
+          })
+      })
+      .catch((error) => {
+        setError(error)
       })
       .finally(() => {
         setLoading(false)
@@ -100,6 +132,7 @@ export const useGetUsers = (initializeUser) => {
     error,
     useAddItem,
     useRemoveItem,
+    useUndoPurchaseCheckItem,
     usePurchaseCheckItem,
   }
 }

@@ -1,55 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import UserCard from '../../components/UserCard'
-import DashGrid from '../../components/DashGrid'
 import Modal from '../../components/Modal'
-import recieve from '../../img/recieve.png'
-import sent from '../../img/sent.png'
-import spent from '../../img/spent.png'
 import { useGetUsers } from './useGetUsers'
-import CardTable from '../../components/CardTable'
 import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
-const dashList = [
-  { name: 'Recieved Gifts', image: recieve },
-  { name: 'Sent Gifts', image: sent },
-]
+import logo from '../../img/fullLogo.png'
 
 const AppWrapper = styled.div`
   position: relative;
   top: 0;
-  width: 100vw;
+  max-width: 100vw;
   height: 100vh;
 `
 
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 const CardsWrapper = styled.div`
-  padding: 40px;
+  padding: 20px 40px;
 `
 
-const MyList = styled.div`
-  padding-bottom: 10px;
-`
+const Header = styled.div`
+  position: sticky;
+  top: 0;
+  background: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px;
 
-const Header = styled.header`
-  width: 100vw;
-  background-color: black;
+  img {
+    width: 80px;
+  }
 `
-
-const AddNewButton = styled.button`
-  width: 100%;
-  text-decoration: none;
-  appearance: none;
-  color: green;
-  padding: 10px;
-  border-radius: 3px;
-  border: 1px solid green;
-  cursor: pointer;
+const Button = styled.button`
+  padding: 10px 15px;
+  font-weight: bolder; ;
 `
 
 const App = () => {
   const [openModal, setOpenModal] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
   const [usersList, setUsersList] = useState([])
+  const [selectedUser, setSelectedUser] = useState()
+
   const {
     data,
     error,
@@ -57,10 +54,18 @@ const App = () => {
     useAddItem,
     useRemoveItem,
     usePurchaseCheckItem,
+    useUndoPurchaseCheckItem,
   } = useGetUsers(setCurrentUser)
-  const userCode = localStorage.getItem('code')
+
+  const onLogout = () => {
+    localStorage.removeItem('code')
+    setOpenModal(true)
+    setCurrentUser(null)
+  }
 
   useEffect(() => {
+    const userCode = localStorage.getItem('code')
+
     if (!userCode) {
       setOpenModal(true)
     }
@@ -71,10 +76,13 @@ const App = () => {
       const newData = { ...data }
       delete newData[currentUser.id]
 
-      const foundUser = Object.values(data).find(
-        (user) => `${user.code}` === userCode,
-      )
       setUsersList(Object.values(newData))
+      if (!selectedUser) {
+        setSelectedUser(Object.values(newData)[0])
+      } else {
+        console.log(newData, selectedUser.id, newData[selectedUser.id])
+        setSelectedUser(newData[selectedUser.id])
+      }
     } else {
       const foundUser = Object.values(data).find(
         (user) => `${user.code}` === userCode,
@@ -86,13 +94,14 @@ const App = () => {
         delete newData[foundUser.id]
 
         setUsersList(Object.values(newData))
+      } else {
+        setUsersList(Object.values(data))
       }
     }
-  }, [data, userCode, currentUser, localStorage])
+  }, [data, currentUser, localStorage, openModal])
 
   return (
     <AppWrapper>
-      <Header></Header>
       {openModal && !currentUser ? (
         <Modal
           loading={loading}
@@ -101,31 +110,38 @@ const App = () => {
           setOpenModal={setOpenModal}
         />
       ) : (
-        <CardsWrapper>
-          {currentUser && (
-            <CurrentUser
-              user={currentUser}
-              onAddItem={useAddItem}
-              onRemoveItem={useRemoveItem}
-            />
-          )}
-
-          {/* {usersList.map((user) => {
-            return (
-              <div key={user.name}>
-                <UserCard user={user} />
-              </div>
-            )
-          })} */}
-          {usersList && currentUser && (
-            <UserTab
-              users={usersList}
-              currentUserPurchased={currentUser?.purchasedItem}
-              onPurchase={usePurchaseCheckItem}
-              currentUserId={currentUser?.id}
-            />
-          )}
-        </CardsWrapper>
+        <>
+          <Header>
+            <img src={logo} />
+            <HeaderWrapper>
+              <h3>Hi, {currentUser?.name}!</h3>
+              <Button onClick={() => onLogout()}>Logout</Button>
+            </HeaderWrapper>
+          </Header>
+          <CardsWrapper>
+            {currentUser && (
+              <CurrentUser
+                user={currentUser}
+                onAddItem={useAddItem}
+                onRemoveItem={useRemoveItem}
+                setOpenModal={setOpenModal}
+                setCurrentUser={setCurrentUser}
+              />
+            )}
+            <h1>Family Wishlist</h1>
+            {usersList && currentUser && (
+              <UserTab
+                users={usersList}
+                currentUserPurchasedItem={currentUser?.purchasedItem}
+                onPurchase={usePurchaseCheckItem}
+                currentUserId={currentUser?.id}
+                onUndoPurchase={useUndoPurchaseCheckItem}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
+              />
+            )}
+          </CardsWrapper>
+        </>
       )}
 
       {/* <DashGrid dashItems={dashList} /> */}

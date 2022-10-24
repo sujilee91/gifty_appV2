@@ -1,6 +1,13 @@
 import React, { useRef } from 'react'
-import { Table, THead, InputField, TextArea } from './styles'
-
+import {
+  Table,
+  THead,
+  InputField,
+  DeleteButton,
+  AddItemRow,
+  Row,
+} from './styles'
+import { onInputNumber } from '../../functions/onInputNumber'
 const CardTable = ({
   user,
   addNew,
@@ -17,35 +24,37 @@ const CardTable = ({
   return (
     <Table>
       <thead>
-        <tr>
+        <Row>
           <THead width={5}>Link</THead>
           <THead width={10}>Price</THead>
           <THead width={25}>Name</THead>
           <THead width={40}>Detail</THead>
           <THead width={5}>Delete</THead>
-        </tr>
+        </Row>
       </thead>
       <tbody>
         {user.items ? (
           <>
             {Object.keys(user?.items).map((userItem) => {
-              const { name, description, link, price, detail, purchased, id } =
+              const { name, link, price, detail, purchased, id } =
                 user.items[userItem]
               return (
                 <tr key={id}>
                   <td>
-                    {/* CHECKER FOR INCLUDE HTTPS */}
-                    <a href={`https://${link}`} target="_blank">
+                    <a href={link} target="_blank">
                       Link
                     </a>
                   </td>
-                  <td>{price ? price : 'N/A'}</td>
+                  <td>{price ? `$${price}` : 'N/A'}</td>
                   <td>{name ? name : 'N/A'}</td>
                   <td>{detail ? detail : 'N/A'}</td>
                   <td>
-                    <button onClick={() => onRemoveItem(user.id, id)}>
-                      X{' '}
-                    </button>{' '}
+                    <DeleteButton
+                      onClick={() => !purchased && onRemoveItem(user.id, id)}
+                      disabled={purchased}
+                    >
+                      X
+                    </DeleteButton>
                   </td>
                 </tr>
               )
@@ -54,44 +63,51 @@ const CardTable = ({
         ) : (
           <></>
         )}
-        {addNew && (
-          <tr>
-            <td>
-              <InputField
-                type="url"
-                onChange={() => {
+        <AddItemRow show={addNew}>
+          <td>
+            <InputField
+              type="url"
+              onChange={() => {
+                if (
+                  linkRef.current.value.includes('http://') ||
+                  linkRef.current.value.includes('https://')
+                ) {
                   setItem({ ...item, link: linkRef.current.value })
-                }}
-                ref={linkRef}
-              ></InputField>
-            </td>
-            <td>
-              <InputField
-                onChange={() => {
-                  setItem({ ...item, price: priceRef.current.value })
-                }}
-                ref={priceRef}
-              ></InputField>
-            </td>
-            <td>
-              <InputField
-                onChange={() => {
-                  setItem({ ...item, name: nameRef.current.value })
-                }}
-                ref={nameRef}
-              ></InputField>
-            </td>
-            <td>
-              <TextArea
-                onChange={() => {
-                  setItem({ ...item, detail: detailRef.current.value })
-                }}
-                ref={detailRef}
-              ></TextArea>
-            </td>
-            <td></td>
-          </tr>
-        )}
+                } else {
+                  const newURL = `https://` + linkRef.current.value
+                  setItem({ ...item, link: newURL })
+                }
+              }}
+              ref={linkRef}
+            ></InputField>
+          </td>
+          <td>
+            <InputField
+              onInput={() => onInputNumber(priceRef.current.value)}
+              onChange={() => {
+                setItem({ ...item, price: priceRef.current.value })
+              }}
+              ref={priceRef}
+            ></InputField>
+          </td>
+          <td>
+            <InputField
+              onChange={() => {
+                setItem({ ...item, name: nameRef.current.value })
+              }}
+              ref={nameRef}
+            ></InputField>
+          </td>
+          <td>
+            <InputField
+              onChange={() => {
+                setItem({ ...item, detail: detailRef.current.value })
+              }}
+              ref={detailRef}
+            ></InputField>
+          </td>
+          <td></td>
+        </AddItemRow>
       </tbody>
     </Table>
   )
