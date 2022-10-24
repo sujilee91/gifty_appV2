@@ -75,6 +75,8 @@ const TabButton = styled.button`
 `}
 `
 const THeadRow = styled.tr`
+  position: sticky;
+  top: 0;
   th:first-child {
     border-top-left-radius: 4px;
   }
@@ -136,9 +138,8 @@ const UserTab = ({
         <Table>
           <thead>
             <THeadRow>
-              <THead width={5}>Link</THead>
               <THead width={10}>Price</THead>
-              <THead width={25}>Name</THead>
+              <THead width={30}>Name</THead>
               <THead width={40}>Detail</THead>
               <THead width={5}>Purchased</THead>
             </THeadRow>
@@ -161,14 +162,12 @@ const UserTab = ({
                   } = selectedUser.items[item]
                   return (
                     <Row key={id}>
+                      <td>${price ? price : 'N/A'}</td>
                       <td>
-                        {/* CHECKER FOR INCLUDE HTTPS */}
                         <a href={`https://${link}`} target="_blank">
-                          Link
+                          {name ? name : 'N/A'}
                         </a>
                       </td>
-                      <td>{price ? price : 'N/A'}</td>
-                      <td>{name ? name : 'N/A'}</td>
                       <td>{detail ? detail : 'N/A'}</td>
                       <td>
                         {purchased ? (

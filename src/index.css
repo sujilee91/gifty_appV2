@@ -4,9 +4,9 @@ html {
 /* 'Roboto', 'Poppins', 'Montserrat' */
 body {
   margin: 0;
-  font-family: 'Roboto', 'Poppins', 'Montserrat';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Poppins';
 }
 
 code {
@@ -67,4 +67,23 @@ h3 {
   font-family: 'Poppins';
   font-weight: 300;
   margin-right: 10px;
+}
+
+.loader {
+  margin: auto;
+  border: 20px solid #e6ebe0;
+  border-radius: 50%;
+  border-top: 20px solid #007658;
+  width: 200px;
+  height: 200px;
+  animation: spinner 4s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

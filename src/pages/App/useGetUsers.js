@@ -12,7 +12,7 @@ export const useGetUsers = (initializeUser) => {
 
   const fetchNewData = () => {
     const dbRef = ref(getDatabase())
-
+    setLoading(true)
     return get(child(dbRef, 'users'))
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -97,6 +97,7 @@ export const useGetUsers = (initializeUser) => {
     const db = getDatabase()
     setLoading(true)
     //set purchsed to false on member's list
+
     set(ref(db, 'users/' + ownerId + '/items/' + itemId + '/purchased'), false)
       .then(() => {
         //remove purchased item on current users list

@@ -5,7 +5,7 @@ import { useGetUsers } from './useGetUsers'
 import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
 import logo from '../../img/fullLogo.png'
-
+import Loader from '../../components/Loader'
 const AppWrapper = styled.div`
   position: relative;
   top: 0;
@@ -80,7 +80,6 @@ const App = () => {
       if (!selectedUser) {
         setSelectedUser(Object.values(newData)[0])
       } else {
-        console.log(newData, selectedUser.id, newData[selectedUser.id])
         setSelectedUser(newData[selectedUser.id])
       }
     } else {
@@ -99,6 +98,8 @@ const App = () => {
       }
     }
   }, [data, currentUser, localStorage, openModal])
+
+  if (loading) return <div className="loader" />
 
   return (
     <AppWrapper>

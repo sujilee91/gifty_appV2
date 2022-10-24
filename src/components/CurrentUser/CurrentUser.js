@@ -101,7 +101,7 @@ const CurrenetUser = ({
             <SaveButton
               onClick={() => {
                 if (item) {
-                  onAddItem(user.id, item)
+                  onAddItem(user.id, { ...item, phurchased: false })
                   setItem(null)
                   setAddNew(false)
                 }
