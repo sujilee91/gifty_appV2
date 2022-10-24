@@ -1,17 +1,5 @@
 import styled from 'styled-components'
-
-export const Table = styled.table`
-  width: 100%;
-  border-radius: 15px;
-`
-
-export const THead = styled.th`
-  text-align: left;
-  background-color: #dddddd;
-  width: ${({ width }) => `${width}%`};
-  padding: 10px;
-  font-weight: 500;
-`
+import { GeneralButton, red_dark } from '../styles'
 
 export const NameCol = styled.th`
   text-align: left;
@@ -20,6 +8,8 @@ export const NameCol = styled.th`
 
 export const InputField = styled.input`
   width: -webkit-fill-available;
+  font-size: 18px;
+  padding: 5px;
 `
 
 export const TextArea = styled.textarea`
@@ -27,11 +17,12 @@ export const TextArea = styled.textarea`
   font-size: 15px;
 `
 
-export const DeleteButton = styled.button`
+export const DeleteButton = styled(GeneralButton)`
   width: 100%;
-  background-color: white;
-  border: 2px solid #ed5a6a;
-  color: #ed5a6a;
+  background-color: ${red_dark};
+  border: 2px solid white;
+  color: white;
+  border-radius: 5px;
 
   :disabled {
     background-color: gray;
@@ -42,14 +33,4 @@ export const DeleteButton = styled.button`
 `
 export const AddItemRow = styled.tr`
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-`
-
-export const Row = styled.tr`
-  th:first-child {
-    border-top-left-radius: 4px;
-  }
-
-  th:last-child {
-    border-top-right-radius: 4px;
-  }
 `

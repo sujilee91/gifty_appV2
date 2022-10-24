@@ -10,7 +10,7 @@ export const useGetUsers = (initializeUser) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const fetchNewData = () => {
+  const fetchNewData = (offLoading) => {
     const dbRef = ref(getDatabase())
     setLoading(true)
     return get(child(dbRef, 'users'))
@@ -26,13 +26,11 @@ export const useGetUsers = (initializeUser) => {
         console.error(error)
         setError(error)
       })
-      .finally(() => {
-        setLoading(false)
-      })
   }
 
   useEffect(() => {
     fetchNewData()
+    setLoading(false)
   }, [])
 
   const useAddItem = (userId, item) => {
@@ -84,6 +82,9 @@ export const useGetUsers = (initializeUser) => {
           .catch((error) => {
             setError(error)
           })
+          .finally(() => {
+            setLoading(false)
+          })
       })
       .catch((error) => {
         setError(error)
@@ -117,6 +118,9 @@ export const useGetUsers = (initializeUser) => {
           })
           .catch((error) => {
             setError(error)
+          })
+          .finally(() => {
+            setLoading(false)
           })
       })
       .catch((error) => {

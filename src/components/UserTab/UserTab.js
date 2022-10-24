@@ -1,35 +1,42 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-
-export const Table = styled.table`
-  width: 100%;
-`
-
-export const THead = styled.th`
-  text-align: left;
-  background-color: #dddddd;
-  width: ${({ width }) => `${width}%`};
-  padding: 5px;
-  font-weight: 500;
-`
-
-export const NameCol = styled.th`
-  text-align: left;
-  background-color: #dddddd;
-`
-
-export const InputField = styled.input`
-  width: 90%;
-`
-
-export const TextArea = styled.textarea`
-  width: 95%;
-  font-size: 15px;
-`
+import {
+  WarningButton,
+  Table,
+  THeadRow,
+  THead,
+  green_light,
+  green_main,
+  green_dark,
+  GeneralButton,
+  yellow_light,
+  RoundButton,
+  yellow_main,
+  red_dark,
+  gray,
+  ItemActionButton,
+} from '../styles'
+import {
+  BsCheckCircleFill,
+  BsCheckCircle,
+  BsCircle,
+  BsDashCircleDotted,
+  BsPlusCircleFill,
+  BsCircleFill,
+} from 'react-icons/bs'
+import Loader from '../Loader'
 
 const TabWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
+
+  @media only screen and (max-width: 728px) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 `
 
 const TabContent = styled.div`
@@ -41,16 +48,19 @@ const TabContent = styled.div`
   border-bottom-left-radius: 5px;
 
   min-height: 25vh;
+  overflow-y: auto;
+
+  @media only screen and (max-width: 728px) {
+    border: none;
+    padding: 5px;
+  }
 `
 
-const TabButton = styled.button`
-  border: none;
-  display: inline-block;
+const TabButton = styled(GeneralButton)`
   padding: 16px;
   vertical-align: middle;
   overflow: hidden;
-  text-decoration: none;
-  color: #3ab796;
+  color: ${green_main};
   background-color: white;
   text-align: center;
   cursor: pointer;
@@ -58,7 +68,7 @@ const TabButton = styled.button`
   font-size: 20px;
   width: 100%;
   background-color: white;
-  border: 2px solid #3ab796;
+  border: 2px solid ${green_light};
   border-radius: unset;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -71,35 +81,30 @@ const TabButton = styled.button`
     font-weight: bolder;
     border-bottom: none;
     color: white;
-    background-color: #3ab796;
+    background-color: ${green_main};
+    border: 2px solid ${green_main};
 `}
-`
-const THeadRow = styled.tr`
-  position: sticky;
-  top: 0;
-  th:first-child {
-    border-top-left-radius: 4px;
-  }
 
-  th:last-child {
-    border-top-right-radius: 4px;
+  @media only screen and (max-width: 728px) {
+    padding: 10px;
+    flex: 1 1 30%; /*grow | shrink | basis */
+    height: 50px;
+    border-radius: 5px;
+    margin: 5px;
   }
 `
+
 const Row = styled.tr`
   padding: 5px;
   td {
     padding: 5px;
   }
 
-  td:last-child {
+  td:first-child {
     text-align: center;
-    input {
-      width: 20px;
-    }
-
-    input
   }
 `
+
 const UserTab = ({
   users,
   currentUserPurchasedItem,
@@ -108,10 +113,14 @@ const UserTab = ({
   onUndoPurchase,
   selectedUser,
   setSelectedUser,
+  loading,
 }) => {
   const purchasedItemsByCurrentUser = () => {
     if (currentUserPurchasedItem) {
-      return Object.keys(currentUserPurchasedItem[selectedUser.id])
+      return (
+        currentUserPurchasedItem[selectedUser.id] &&
+        Object.keys(currentUserPurchasedItem[selectedUser.id])
+      )
     }
 
     return null
@@ -138,16 +147,14 @@ const UserTab = ({
         <Table>
           <thead>
             <THeadRow>
+              <THead width={5}>Status</THead>
               <THead width={10}>Price</THead>
               <THead width={30}>Name</THead>
               <THead width={40}>Detail</THead>
-              <THead width={5}>Purchased</THead>
+              <THead width={10}>Action</THead>
             </THeadRow>
           </thead>
           <tbody>
-            {/* Purchased => purchased by current user => editable / IF NOT => un-editable
-                How to tell? current user should have purchased Item list
-            */}
             {selectedUser?.items ? (
               <>
                 {Object.keys(selectedUser?.items).map((item) => {
@@ -162,6 +169,17 @@ const UserTab = ({
                   } = selectedUser.items[item]
                   return (
                     <Row key={id}>
+                      <td>
+                        {purchased ? (
+                          !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
+                            <BsCheckCircleFill color={yellow_main} size={20} />
+                          ) : (
+                            <BsCheckCircleFill color={green_dark} size={20} />
+                          )
+                        ) : (
+                          <BsCheckCircleFill color={gray} size={20} />
+                        )}
+                      </td>
                       <td>${price ? price : 'N/A'}</td>
                       <td>
                         <a href={`https://${link}`} target="_blank">
@@ -170,13 +188,13 @@ const UserTab = ({
                       </td>
                       <td>{detail ? detail : 'N/A'}</td>
                       <td>
-                        {purchased ? (
+                        {loading ? (
+                          <Loader />
+                        ) : purchased ? (
                           !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
-                            <button disabled onClick={() => null}>
-                              Taken!
-                            </button>
+                            <div></div>
                           ) : (
-                            <button
+                            <ItemActionButton
                               onClick={() =>
                                 onUndoPurchase(
                                   currentUserId,
@@ -184,18 +202,23 @@ const UserTab = ({
                                   id,
                                 )
                               }
+                              title="Undo"
+                              isUndo={true}
                             >
-                              Undo Purchase
-                            </button>
+                              <BsDashCircleDotted color={red_dark} size={25} />
+                              <div>Undo</div>
+                            </ItemActionButton>
                           )
                         ) : (
-                          <button
+                          <ItemActionButton
                             onClick={() =>
                               onPurchase(currentUserId, selectedUser.id, id)
                             }
+                            title="I got it!"
                           >
-                            Purchased
-                          </button>
+                            <BsPlusCircleFill color="white" size={25} />
+                            <div>Check</div>
+                          </ItemActionButton>
                         )}
                       </td>
                     </Row>

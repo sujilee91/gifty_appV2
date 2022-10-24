@@ -1,12 +1,6 @@
 import React, { useRef } from 'react'
-import {
-  Table,
-  THead,
-  InputField,
-  DeleteButton,
-  AddItemRow,
-  Row,
-} from './styles'
+import { InputField, DeleteButton, AddItemRow } from './styles'
+import { Table, THead, THeadRow } from '../styles'
 import { onInputNumber } from '../../functions/onInputNumber'
 const CardTable = ({
   user,
@@ -15,22 +9,39 @@ const CardTable = ({
   setItem,
   isCurrentUser,
   onRemoveItem,
+  onSave,
 }) => {
   const linkRef = useRef(null)
   const priceRef = useRef(null)
   const nameRef = useRef(null)
   const detailRef = useRef(null)
 
+  const onKeyPress = (prevRef, currentRef, nextRef, e) => {
+    //on press delete / backspace
+    if (e.which === 8) {
+      if (!currentRef.current.value) {
+        prevRef.current.focus()
+      }
+    } else if (e.key === 'Enter') {
+      if (!nextRef) {
+        onSave()
+        linkRef.current.focus()
+      } else {
+        nextRef.current.focus()
+      }
+    }
+  }
+
   return (
     <Table>
       <thead>
-        <Row>
+        <THeadRow>
           <THead width={5}>Link</THead>
           <THead width={10}>Price</THead>
-          <THead width={25}>Name</THead>
-          <THead width={40}>Detail</THead>
+          <THead width={30}>Name</THead>
+          <THead width={50}>Detail</THead>
           <THead width={5}>Delete</THead>
-        </Row>
+        </THeadRow>
       </thead>
       <tbody>
         {user.items ? (
@@ -79,15 +90,22 @@ const CardTable = ({
                 }
               }}
               ref={linkRef}
+              onKeyDownCapture={(e) => onKeyPress(null, linkRef, priceRef, e)}
             ></InputField>
           </td>
           <td>
             <InputField
-              onInput={() => onInputNumber(priceRef.current.value)}
               onChange={() => {
+                priceRef.current.value = priceRef.current.value.replace(
+                  /[^0-9]/g,
+                  '',
+                )
                 setItem({ ...item, price: priceRef.current.value })
               }}
               ref={priceRef}
+              onKeyDownCapture={(e) =>
+                onKeyPress(linkRef, priceRef, nameRef, e)
+              }
             ></InputField>
           </td>
           <td>
@@ -96,6 +114,9 @@ const CardTable = ({
                 setItem({ ...item, name: nameRef.current.value })
               }}
               ref={nameRef}
+              onKeyDownCapture={(e) =>
+                onKeyPress(priceRef, nameRef, detailRef, e)
+              }
             ></InputField>
           </td>
           <td>
@@ -104,6 +125,7 @@ const CardTable = ({
                 setItem({ ...item, detail: detailRef.current.value })
               }}
               ref={detailRef}
+              onKeyDownCapture={(e) => onKeyPress(nameRef, detailRef, null, e)}
             ></InputField>
           </td>
           <td></td>

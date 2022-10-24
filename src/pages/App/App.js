@@ -6,6 +6,7 @@ import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
 import logo from '../../img/fullLogo.png'
 import Loader from '../../components/Loader'
+import { GeneralButton, sm_max } from '../../components/styles'
 const AppWrapper = styled.div`
   position: relative;
   top: 0;
@@ -20,6 +21,10 @@ const HeaderWrapper = styled.div`
 `
 const CardsWrapper = styled.div`
   padding: 20px 40px;
+
+  @media only screen and (max-width: 728px) {
+    padding: 0 20px 20px 20px;
+  }
 `
 
 const Header = styled.div`
@@ -35,10 +40,14 @@ const Header = styled.div`
   img {
     width: 80px;
   }
+
+  @media only screen and (max-width: 728px) {
+    box-shadow: none;
+    position: relative;
+  }
 `
-const Button = styled.button`
+const Button = styled(GeneralButton)`
   padding: 10px 15px;
-  font-weight: bolder; ;
 `
 
 const App = () => {
@@ -61,6 +70,7 @@ const App = () => {
     localStorage.removeItem('code')
     setOpenModal(true)
     setCurrentUser(null)
+    setSelectedUser(null)
   }
 
   useEffect(() => {
@@ -99,7 +109,7 @@ const App = () => {
     }
   }, [data, currentUser, localStorage, openModal])
 
-  if (loading) return <div className="loader" />
+  //if (loading) return <Loader />
 
   return (
     <AppWrapper>
@@ -116,7 +126,9 @@ const App = () => {
             <img src={logo} />
             <HeaderWrapper>
               <h3>Hi, {currentUser?.name}!</h3>
-              <Button onClick={() => onLogout()}>Logout</Button>
+              <Button onClick={() => onLogout()} primary>
+                Logout
+              </Button>
             </HeaderWrapper>
           </Header>
           <CardsWrapper>
@@ -127,6 +139,7 @@ const App = () => {
                 onRemoveItem={useRemoveItem}
                 setOpenModal={setOpenModal}
                 setCurrentUser={setCurrentUser}
+                loading={loading}
               />
             )}
             <h1>Family Wishlist</h1>
@@ -139,6 +152,7 @@ const App = () => {
                 onUndoPurchase={useUndoPurchaseCheckItem}
                 selectedUser={selectedUser}
                 setSelectedUser={setSelectedUser}
+                loading={loading}
               />
             )}
           </CardsWrapper>

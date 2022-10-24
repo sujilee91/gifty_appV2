@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import logo from '../../img/fullLogo.png'
 import { onInputNumber } from '../../functions/onInputNumber'
-
+import { GeneralButton, red_dark } from '../styles'
+import Loader from '../Loader'
 const ModalWarpper = styled.div`
   position: absolute;
   z-index: 999;
@@ -19,6 +20,16 @@ const ModalCard = styled.div`
   height: 50%;
   padding: 20px;
   border-radius: 15px;
+
+  @media only screen and (max-width: 728px) {
+    width: 90vw;
+    height: 90vh;
+  }
+
+  @media only screen and (min-width: 729px) and (max-width: 992px) {
+    width: 60vw;
+    height: 60vh;
+  }
 `
 const Content = styled.div`
   display: flex;
@@ -28,7 +39,7 @@ const Content = styled.div`
   width: 100%;
   height: 100%;
 `
-const SubmitButton = styled.button`
+const SubmitButton = styled(GeneralButton)`
   text-decoration: none;
   appearance: none;
   color: white;
@@ -43,10 +54,11 @@ const InputField = styled.input`
   margin: 10px;
   border: none;
   border-bottom: 2px solid lightseagreen;
-
+  text-align: center;
   :focus {
     outline: none;
-    border-bottom: 2px solid green;
+    border: 2px solid green;
+    border-radius: 5px;
   }
 `
 
@@ -58,16 +70,24 @@ const InputFieldWrapper = styled.div`
 
 const Logo = styled.img`
   width: 10vw;
+
+  @media only screen and (max-width: 728px) {
+    width: 50vw;
+  }
 `
 
 const ContentHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media only screen and (max-width: 728px) {
+    text-align: center;
+  }
 `
 
 const Error = styled.div`
-  color: #ed5a6a;
+  color: ${red_dark};
 `
 
 const Modal = ({ loading, usersList, setCurrentUser, setOpenModal }) => {
@@ -91,11 +111,12 @@ const Modal = ({ loading, usersList, setCurrentUser, setOpenModal }) => {
       setCurrentUser(currentUser)
       setOpenModal(false)
     } else {
+      setError('Hmmmm... Wrong code! Please try again.')
+
       code1Ref.current.value = ''
       code2Ref.current.value = ''
       code3Ref.current.value = ''
       code4Ref.current.value = ''
-      setError('Hmmmm... Wrong code! Please try again.')
       code1Ref.current.focus()
     }
   }
@@ -110,86 +131,91 @@ const Modal = ({ loading, usersList, setCurrentUser, setOpenModal }) => {
         prevRef.current.value = ''
         prevRef.current.focus()
       }
+    } else if (e.key === 'Enter') {
+      handleOnClick()
     } else {
       currentRef.current.value = e.key.replace(/[^0-9]/g, '')
       if (currentRef.current.value && nextRef) {
         nextRef.current.focus()
       }
     }
-
-    if (e.key === 'Enter') {
-      handleOnClick()
-    }
   }
+
+  useEffect(() => {
+    code1Ref.current.focus()
+  }, [])
 
   return (
     <ModalWarpper>
       <ModalCard>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <Content>
-            <ContentHeader>
-              <Logo src={logo} />
-              <h1>Welcome to Gifty 2022</h1>
-              <div>
-                {error ? (
-                  <Error>{error}</Error>
-                ) : (
-                  <div>Please enter the code :)</div>
-                )}
-              </div>
-            </ContentHeader>
+        <Content>
+          <ContentHeader>
+            <Logo src={logo} />
+            <h1>Welcome to Gifty 2022</h1>
+            <div>
+              {error ? (
+                <Error>{error}</Error>
+              ) : (
+                <div>Please enter the code :)</div>
+              )}
+            </div>
+          </ContentHeader>
 
-            <InputFieldWrapper>
-              <InputField
-                type="text"
-                pattern="[0-9]{1}"
-                required
-                ref={code1Ref}
-                maxLength={1}
-                onKeyDownCapture={(e) =>
-                  onKeyPress(null, code1Ref, code2Ref, e)
-                }
-                inputMode="numeric"
-              ></InputField>
-              <InputField
-                type="text"
-                pattern="[0-9]{1}"
-                required
-                ref={code2Ref}
-                maxLength={1}
-                onKeyDownCapture={(e) =>
-                  onKeyPress(code1Ref, code2Ref, code3Ref, e)
-                }
-                inputMode="numeric"
-              ></InputField>
-              <InputField
-                type="text"
-                pattern="[0-9]{1}"
-                required
-                ref={code3Ref}
-                onKeyDownCapture={(e) =>
-                  onKeyPress(code2Ref, code3Ref, code4Ref, e)
-                }
-                maxLength={1}
-                inputMode="numeric"
-              ></InputField>
-              <InputField
-                type="text"
-                pattern="[0-9]{1}"
-                required
-                ref={code4Ref}
-                maxLength={1}
-                onKeyDownCapture={(e) =>
-                  onKeyPress(code3Ref, code4Ref, null, e)
-                }
-              ></InputField>
-            </InputFieldWrapper>
-            {/* <InputField ref={inputEl} required /> */}
-            <SubmitButton onClick={handleOnClick}>Let's Go!</SubmitButton>
-          </Content>
-        )}
+          <InputFieldWrapper>
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                <InputField
+                  type="text"
+                  pattern="[0-9]{1}"
+                  required
+                  ref={code1Ref}
+                  maxLength={1}
+                  onKeyDownCapture={(e) =>
+                    onKeyPress(null, code1Ref, code2Ref, e)
+                  }
+                  inputMode="numeric"
+                ></InputField>
+                <InputField
+                  type="text"
+                  pattern="[0-9]{1}"
+                  required
+                  ref={code2Ref}
+                  maxLength={1}
+                  onKeyDownCapture={(e) =>
+                    onKeyPress(code1Ref, code2Ref, code3Ref, e)
+                  }
+                  inputMode="numeric"
+                ></InputField>
+                <InputField
+                  type="text"
+                  pattern="[0-9]{1}"
+                  required
+                  ref={code3Ref}
+                  onKeyDownCapture={(e) =>
+                    onKeyPress(code2Ref, code3Ref, code4Ref, e)
+                  }
+                  maxLength={1}
+                  inputMode="numeric"
+                ></InputField>
+                <InputField
+                  type="text"
+                  pattern="[0-9]{1}"
+                  required
+                  ref={code4Ref}
+                  maxLength={1}
+                  onKeyDownCapture={(e) =>
+                    onKeyPress(code3Ref, code4Ref, null, e)
+                  }
+                ></InputField>
+              </>
+            )}
+          </InputFieldWrapper>
+          <SubmitButton onClick={handleOnClick} disabled={loading} primary>
+            {loading ? <Loader /> : `Let's Go!`}
+          </SubmitButton>
+        </Content>
       </ModalCard>
     </ModalWarpper>
   )

@@ -37,18 +37,6 @@ table {
   font-family: 'Montserrat';
 }
 
-button {
-  text-decoration: none;
-  appearance: none;
-  font-family: 'Poppins';
-  color: white;
-  background-color: #3ab796;
-  text-align: center;
-  cursor: pointer;
-  border: 2px solid #3ab796;
-  border-radius: 3px;
-}
-
 input,
 textarea {
   border: none;

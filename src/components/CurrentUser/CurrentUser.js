@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import CardTable from '../CardTable'
+import { WarningButton, green_dark, GeneralButton } from '../styles'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
-const Button = styled.button`
-  padding: 10px 15px;
-  font-weight: bolder;
-`
+import Loader from '../Loader'
 
-const AddNewButton = styled(Button)`
-  padding: 10px;
-  background-color: #007658;
-  border: 2px solid #007658;
+const AddNewButton = styled(GeneralButton)`
+  padding: 10px 15px;
+  background-color: ${green_dark};
+  border: 2px solid ${green_dark};
   color: white;
   width: 100%;
   margin-top: 20px;
@@ -22,15 +20,11 @@ const ButtonWrapper = styled.div`
   margin-top: 20px;
 `
 
-const SaveButton = styled.button`
-  width: 20%;
+const SaveButton = styled(GeneralButton)`
+  padding: 0 50px;
 `
-const CancelButton = styled.button`
-  background-color: white;
-  border: 2px solid #ed5a6a;
-  color: #ed5a6a;
+const CancelButton = styled(WarningButton)`
   padding: 10px 15px;
-  width: 10%;
   margin-left: 20px;
 `
 
@@ -69,11 +63,19 @@ const CurrenetUser = ({
   onRemoveItem,
   setOpenModal,
   setCurrentUser,
+  loading,
 }) => {
   const [addNew, setAddNew] = useState(false)
   const [item, setItem] = useState()
   const [open, setOpen] = useState(true)
 
+  const onSave = () => {
+    if (item) {
+      onAddItem(user.id, { ...item, phurchased: false })
+      setItem(null)
+      setAddNew(false)
+    }
+  }
   return (
     <Card>
       <CardTitle onClick={() => setOpen(!open)}>
@@ -94,19 +96,12 @@ const CurrenetUser = ({
             setItem={setItem}
             isCurrentUser={true}
             onRemoveItem={onRemoveItem}
+            onSave={onSave}
           />
         </CardWrapper>
         {addNew ? (
           <ButtonWrapper>
-            <SaveButton
-              onClick={() => {
-                if (item) {
-                  onAddItem(user.id, { ...item, phurchased: false })
-                  setItem(null)
-                  setAddNew(false)
-                }
-              }}
-            >
+            <SaveButton primary onClick={() => onSave()} disabled={loading}>
               Save
             </SaveButton>
             <CancelButton
@@ -119,8 +114,12 @@ const CurrenetUser = ({
             </CancelButton>
           </ButtonWrapper>
         ) : (
-          <AddNewButton onClick={() => setAddNew(true)}>
-            Add New Item
+          <AddNewButton
+            onClick={() => setAddNew(true)}
+            disabled={loading}
+            primary
+          >
+            {loading ? <Loader /> : `Add New Item`}
           </AddNewButton>
         )}
       </CardContent>
