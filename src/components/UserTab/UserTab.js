@@ -205,7 +205,12 @@ const UserTab = ({
                               title="Undo"
                               isUndo={true}
                             >
-                              <BsDashCircleDotted color={red_dark} size={25} />
+                              <div>
+                                <BsDashCircleDotted
+                                  color={red_dark}
+                                  size={25}
+                                />
+                              </div>
                               <div>Undo</div>
                             </ItemActionButton>
                           )
@@ -216,7 +221,9 @@ const UserTab = ({
                             }
                             title="I got it!"
                           >
-                            <BsPlusCircleFill color="white" size={25} />
+                            <div>
+                              <BsPlusCircleFill color="white" size={25} />
+                            </div>
                             <div>Check</div>
                           </ItemActionButton>
                         )}

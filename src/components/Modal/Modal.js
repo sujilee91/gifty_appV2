@@ -208,6 +208,7 @@ const Modal = ({ loading, usersList, setCurrentUser, setOpenModal }) => {
                   onKeyDownCapture={(e) =>
                     onKeyPress(code3Ref, code4Ref, null, e)
                   }
+                  inputMode="numeric"
                 ></InputField>
               </>
             )}

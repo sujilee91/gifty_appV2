@@ -108,6 +108,12 @@ export const ItemActionButton = styled(GeneralButton)`
   div {
     margin: 0 10px;
   }
+
+  div:first-child {
+    margin: 0;
+    min-width: 25px;
+    display: flex;
+  }
 `
 
 export const Table = styled.table`
@@ -116,9 +122,6 @@ export const Table = styled.table`
 
   td {
     padding: 0 5px;
-  }
-  td :last-child {
-    padding: 0 10px;
   }
 `
 
