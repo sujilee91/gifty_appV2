@@ -11,11 +11,8 @@ const spinner = keyframes`
 
 `
 const LoaderWrapper = styled.div`
-  position: absolute;
-  z-index: 999;
   width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.1);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,6 +28,10 @@ const Load = styled.div`
   animation: spinner 1s linear infinite;
 `
 
-const Loader = () => <Load />
+const Loader = () => (
+  <LoaderWrapper>
+    <Load />
+  </LoaderWrapper>
+)
 
 export default Loader

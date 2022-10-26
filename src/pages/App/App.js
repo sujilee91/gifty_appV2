@@ -6,6 +6,8 @@ import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
 import logo from '../../img/fullLogo.png'
 import { GeneralButton } from '../../components/styles'
+import Loader from '../../components/Loader'
+
 const AppWrapper = styled.div`
   position: relative;
   top: 0;
@@ -136,7 +138,7 @@ const App = () => {
             </HeaderWrapper>
           </Header>
           <CardsWrapper>
-            {currentUser && (
+            {currentUser || loading ? (
               <CurrentUser
                 user={currentUser}
                 onAddItem={useAddItem}
@@ -145,9 +147,11 @@ const App = () => {
                 setCurrentUser={setCurrentUser}
                 loading={loading}
               />
+            ) : (
+              <Loader />
             )}
             <h1>Family Wishlist</h1>
-            {usersList && currentUser && (
+            {usersList && currentUser ? (
               <UserTab
                 users={usersList}
                 currentUserPurchasedItem={currentUser?.purchasedItem}
@@ -158,6 +162,8 @@ const App = () => {
                 setSelectedUser={setSelectedUser}
                 loading={loading}
               />
+            ) : (
+              <Loader />
             )}
           </CardsWrapper>
         </>
