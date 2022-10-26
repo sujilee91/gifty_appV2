@@ -21,7 +21,8 @@ const HeaderWrapper = styled.div`
 `
 const CardsWrapper = styled.div`
   padding: 20px 40px;
-
+  max-width: 1100px;
+  margin: auto;
   @media only screen and (max-width: 728px) {
     padding: 0 20px 20px 20px;
   }

@@ -208,7 +208,7 @@ const UserTab = ({
                               <div>
                                 <BsDashCircleDotted
                                   color={red_dark}
-                                  size={25}
+                                  size={20}
                                 />
                               </div>
                               <div>Undo</div>
@@ -222,9 +222,9 @@ const UserTab = ({
                             title="I got it!"
                           >
                             <div>
-                              <BsPlusCircleFill color="white" size={25} />
+                              <BsPlusCircleFill color="white" size={20} />
                             </div>
-                            <div>Check</div>
+                            <div>Take</div>
                           </ItemActionButton>
                         )}
                       </td>

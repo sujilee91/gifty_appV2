@@ -111,7 +111,7 @@ export const ItemActionButton = styled(GeneralButton)`
 
   div:first-child {
     margin: 0;
-    min-width: 25px;
+    min-width: 20px;
     display: flex;
   }
 `
