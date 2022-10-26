@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import {
-  WarningButton,
   Table,
   THeadRow,
   THead,
@@ -9,8 +7,6 @@ import {
   green_main,
   green_dark,
   GeneralButton,
-  yellow_light,
-  RoundButton,
   yellow_main,
   red_dark,
   gray,
@@ -18,11 +14,8 @@ import {
 } from '../styles'
 import {
   BsCheckCircleFill,
-  BsCheckCircle,
-  BsCircle,
   BsDashCircleDotted,
   BsPlusCircleFill,
-  BsCircleFill,
 } from 'react-icons/bs'
 import Loader from '../Loader'
 
@@ -158,15 +151,8 @@ const UserTab = ({
             {selectedUser?.items ? (
               <>
                 {Object.keys(selectedUser?.items).map((item) => {
-                  const {
-                    name,
-                    description,
-                    link,
-                    price,
-                    detail,
-                    purchased,
-                    id,
-                  } = selectedUser.items[item]
+                  const { name, link, price, detail, purchased, id } =
+                    selectedUser.items[item]
                   return (
                     <Row key={id}>
                       <td>

@@ -5,8 +5,7 @@ import { useGetUsers } from './useGetUsers'
 import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
 import logo from '../../img/fullLogo.png'
-import Loader from '../../components/Loader'
-import { GeneralButton, sm_max } from '../../components/styles'
+import { GeneralButton } from '../../components/styles'
 const AppWrapper = styled.div`
   position: relative;
   top: 0;
@@ -110,7 +109,11 @@ const App = () => {
     }
   }, [data, currentUser, localStorage, openModal])
 
-  //if (loading) return <Loader />
+  useEffect(() => {
+    if (error) {
+      alert(`${error}`)
+    }
+  }, [error])
 
   return (
     <AppWrapper>

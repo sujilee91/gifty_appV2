@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import { InputField, DeleteButton, AddItemRow } from './styles'
 import { Table, THead, THeadRow } from '../styles'
-import { onInputNumber } from '../../functions/onInputNumber'
 const CardTable = ({
   user,
   addNew,
@@ -52,7 +51,7 @@ const CardTable = ({
               return (
                 <tr key={id}>
                   <td>
-                    <a href={link} target="_blank">
+                    <a href={link} target="_blank" rel="noreferrer">
                       Link
                     </a>
                   </td>
