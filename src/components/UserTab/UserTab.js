@@ -153,6 +153,7 @@ const UserTab = ({
                 {Object.keys(selectedUser?.items).map((item) => {
                   const { name, link, price, detail, purchased, id } =
                     selectedUser.items[item]
+
                   return (
                     <Row key={id}>
                       <td>
@@ -168,7 +169,7 @@ const UserTab = ({
                       </td>
                       <td>${price ? price : 'N/A'}</td>
                       <td>
-                        <a href={`https://${link}`} target="_blank">
+                        <a href={link} target="_blank">
                           {name ? name : 'N/A'}
                         </a>
                       </td>

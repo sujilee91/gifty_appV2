@@ -105,10 +105,6 @@ export const ItemActionButton = styled(GeneralButton)`
     color: black;
   }
 
-  div {
-    margin: 0 10px;
-  }
-
   div:first-child {
     margin: 0;
     min-width: 20px;

@@ -5,52 +5,14 @@ import { useGetUsers } from './useGetUsers'
 import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
 import logo from '../../img/fullLogo.png'
-import { GeneralButton } from '../../components/styles'
 import Loader from '../../components/Loader'
-
-const AppWrapper = styled.div`
-  position: relative;
-  top: 0;
-  max-width: 100vw;
-  height: 100vh;
-`
-
-const HeaderWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-const CardsWrapper = styled.div`
-  padding: 20px 40px;
-  max-width: 1100px;
-  margin: auto;
-  @media only screen and (max-width: 728px) {
-    padding: 0 20px 20px 20px;
-  }
-`
-
-const Header = styled.div`
-  position: sticky;
-  top: 0;
-  background: white;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 20px;
-
-  img {
-    width: 80px;
-  }
-
-  @media only screen and (max-width: 728px) {
-    box-shadow: none;
-    position: relative;
-  }
-`
-const Button = styled(GeneralButton)`
-  padding: 10px 15px;
-`
+import {
+  Button,
+  AppWrapper,
+  Header,
+  CardsWrapper,
+  HeaderWrapper,
+} from './styles'
 
 const App = () => {
   const [openModal, setOpenModal] = useState(false)
@@ -109,7 +71,7 @@ const App = () => {
         setUsersList(Object.values(data))
       }
     }
-  }, [data, currentUser, localStorage, openModal])
+  }, [data, currentUser, openModal])
 
   useEffect(() => {
     if (error) {
@@ -168,8 +130,6 @@ const App = () => {
           </CardsWrapper>
         </>
       )}
-
-      {/* <DashGrid dashItems={dashList} /> */}
     </AppWrapper>
   )
 }

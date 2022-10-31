@@ -10,7 +10,7 @@ export const useGetUsers = (initializeUser) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const fetchNewData = (offLoading) => {
+  const fetchNewData = () => {
     const dbRef = ref(getDatabase())
     setLoading(true)
     return get(child(dbRef, 'users'))
