@@ -1,6 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { InputField, DeleteButton, AddItemRow } from './styles'
 import { Table, THead, THeadRow } from '../styles'
+
 const CardTable = ({
   user,
   addNew,
@@ -31,6 +32,38 @@ const CardTable = ({
     }
   }
 
+  const Items = ({ items }) => {
+    return Object.keys(items).map((userItem) => {
+      const { name, link, price, detail, purchased, id } = user.items[userItem]
+      return (
+        <tr key={id}>
+          <td>
+            <a href={link} target="_blank" rel="noreferrer">
+              Link
+            </a>
+          </td>
+          <td>{price ? `$${price}` : 'N/A'}</td>
+          <td>{name ? name : 'N/A'}</td>
+          <td>{detail ? detail : 'N/A'}</td>
+          <td>
+            <DeleteButton
+              onClick={() => !purchased && onRemoveItem(user.id, id)}
+              disabled={purchased}
+            >
+              X
+            </DeleteButton>
+          </td>
+        </tr>
+      )
+    })
+  }
+
+  const ItemsMemo = React.memo(Items)
+
+  const userItemRowMemo = useMemo(() => {
+    if (!user.items) return <></>
+  }, [user.items])
+
   return (
     <Table>
       <thead>
@@ -43,36 +76,7 @@ const CardTable = ({
         </THeadRow>
       </thead>
       <tbody>
-        {user.items ? (
-          <>
-            {Object.keys(user?.items).map((userItem) => {
-              const { name, link, price, detail, purchased, id } =
-                user.items[userItem]
-              return (
-                <tr key={id}>
-                  <td>
-                    <a href={link} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  </td>
-                  <td>{price ? `$${price}` : 'N/A'}</td>
-                  <td>{name ? name : 'N/A'}</td>
-                  <td>{detail ? detail : 'N/A'}</td>
-                  <td>
-                    <DeleteButton
-                      onClick={() => !purchased && onRemoveItem(user.id, id)}
-                      disabled={purchased}
-                    >
-                      X
-                    </DeleteButton>
-                  </td>
-                </tr>
-              )
-            })}
-          </>
-        ) : (
-          <></>
-        )}
+        {user.items ? <ItemsMemo items={user.items} /> : <></>}
         <AddItemRow show={addNew}>
           <td>
             <InputField
@@ -82,7 +86,7 @@ const CardTable = ({
                   linkRef.current.value.includes('http://') ||
                   linkRef.current.value.includes('https://')
                 ) {
-                  setItem({ ...item, link: linkRef.current.value })
+                  setItem({ ...item, link: linkRef.curren6ㅅ6t.value })
                 } else {
                   const newURL = `https://` + linkRef.current.value
                   setItem({ ...item, link: newURL })

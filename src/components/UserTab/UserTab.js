@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import {
   Table,
@@ -108,6 +109,85 @@ const UserTab = ({
   setSelectedUser,
   loading,
 }) => {
+  const usersList = ({ users }) => {
+    return users.map((user) => {
+      return (
+        <TabButton
+          selected={selectedUser && selectedUser.id === user.id}
+          key={user.id}
+          onClick={() => setSelectedUser(user)}
+        >
+          {user.name}
+        </TabButton>
+      )
+    })
+  }
+
+  const items = ({ items }) => {
+    return Object.keys(items).map((item) => {
+      const { name, link, price, detail, purchased, id } =
+        selectedUser.items[item]
+
+      return (
+        <Row key={id}>
+          <td>
+            {purchased ? (
+              !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
+                <BsCheckCircleFill color={yellow_main} size={20} />
+              ) : (
+                <BsCheckCircleFill color={green_dark} size={20} />
+              )
+            ) : (
+              <BsCheckCircleFill color={gray} size={20} />
+            )}
+          </td>
+          <td>${price ? price : 'N/A'}</td>
+          <td>
+            <a href={link} target="_blank">
+              {name ? name : 'N/A'}
+            </a>
+          </td>
+          <td>{detail ? detail : 'N/A'}</td>
+          <td>
+            {loading ? (
+              <Loader />
+            ) : purchased ? (
+              !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
+                <div></div>
+              ) : (
+                <ItemActionButton
+                  onClick={() =>
+                    onUndoPurchase(currentUserId, selectedUser.id, id)
+                  }
+                  title="Undo"
+                  isUndo={true}
+                >
+                  <div>
+                    <BsDashCircleDotted color={red_dark} size={20} />
+                  </div>
+                  <div>Undo</div>
+                </ItemActionButton>
+              )
+            ) : (
+              <ItemActionButton
+                onClick={() => onPurchase(currentUserId, selectedUser.id, id)}
+                title="I got it!"
+              >
+                <div>
+                  <BsPlusCircleFill color="white" size={20} />
+                </div>
+                <div>Take</div>
+              </ItemActionButton>
+            )}
+          </td>
+        </Row>
+      )
+    })
+  }
+
+  const UsersMemo = React.memo(usersList)
+  const ItemsMemo = React.memo(items)
+
   const purchasedItemsByCurrentUser = () => {
     if (currentUserPurchasedItem) {
       return (
@@ -124,17 +204,7 @@ const UserTab = ({
   return (
     <div>
       <TabWrapper>
-        {users.map((user) => {
-          return (
-            <TabButton
-              selected={selectedUser && selectedUser.id === user.id}
-              key={user.id}
-              onClick={() => setSelectedUser(user)}
-            >
-              {user.name}
-            </TabButton>
-          )
-        })}
+        <UsersMemo users={users} />
       </TabWrapper>
       <TabContent>
         <Table>
@@ -149,76 +219,7 @@ const UserTab = ({
           </thead>
           <tbody>
             {selectedUser?.items ? (
-              <>
-                {Object.keys(selectedUser?.items).map((item) => {
-                  const { name, link, price, detail, purchased, id } =
-                    selectedUser.items[item]
-
-                  return (
-                    <Row key={id}>
-                      <td>
-                        {purchased ? (
-                          !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
-                            <BsCheckCircleFill color={yellow_main} size={20} />
-                          ) : (
-                            <BsCheckCircleFill color={green_dark} size={20} />
-                          )
-                        ) : (
-                          <BsCheckCircleFill color={gray} size={20} />
-                        )}
-                      </td>
-                      <td>${price ? price : 'N/A'}</td>
-                      <td>
-                        <a href={link} target="_blank">
-                          {name ? name : 'N/A'}
-                        </a>
-                      </td>
-                      <td>{detail ? detail : 'N/A'}</td>
-                      <td>
-                        {loading ? (
-                          <Loader />
-                        ) : purchased ? (
-                          !purchasedItemsByCurrentUser()?.includes(`${id}`) ? (
-                            <div></div>
-                          ) : (
-                            <ItemActionButton
-                              onClick={() =>
-                                onUndoPurchase(
-                                  currentUserId,
-                                  selectedUser.id,
-                                  id,
-                                )
-                              }
-                              title="Undo"
-                              isUndo={true}
-                            >
-                              <div>
-                                <BsDashCircleDotted
-                                  color={red_dark}
-                                  size={20}
-                                />
-                              </div>
-                              <div>Undo</div>
-                            </ItemActionButton>
-                          )
-                        ) : (
-                          <ItemActionButton
-                            onClick={() =>
-                              onPurchase(currentUserId, selectedUser.id, id)
-                            }
-                            title="I got it!"
-                          >
-                            <div>
-                              <BsPlusCircleFill color="white" size={20} />
-                            </div>
-                            <div>Take</div>
-                          </ItemActionButton>
-                        )}
-                      </td>
-                    </Row>
-                  )
-                })}
-              </>
+              <ItemsMemo items={selectedUser.items} />
             ) : (
               <></>
             )}
