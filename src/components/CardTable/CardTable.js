@@ -86,7 +86,7 @@ const CardTable = ({
                   linkRef.current.value.includes('http://') ||
                   linkRef.current.value.includes('https://')
                 ) {
-                  setItem({ ...item, link: linkRef.curren6ㅅ6t.value })
+                  setItem({ ...item, link: linkRef.current.value })
                 } else {
                   const newURL = `https://` + linkRef.current.value
                   setItem({ ...item, link: newURL })
