@@ -71,7 +71,7 @@ const CurrenetUser = ({
 
   const onSave = () => {
     if (item) {
-      onAddItem(user.id, { ...item, phurchased: false })
+      onAddItem(user.id, { ...item, purchased: false })
       setItem(null)
       setAddNew(false)
     }

@@ -67,13 +67,19 @@ export const useGetUsers = (initializeUser) => {
       })
   }
 
-  const usePurchaseCheckItem = (currentUserId, ownerId, itemId) => {
+  const usePurchaseCheckItem = (
+    currentUserId,
+    ownerId,
+    itemId,
+    purchasedItems,
+  ) => {
     const db = getDatabase()
     setLoading(true)
     const id = Date.now()
     set(ref(db, 'users/' + ownerId + '/items/' + itemId + '/purchased'), true)
       .then(() => {
         set(ref(db, 'users/' + currentUserId + '/purchasedItem/' + ownerId), {
+          ...purchasedItems,
           [itemId]: '',
         })
           .then(() => {

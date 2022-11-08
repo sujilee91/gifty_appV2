@@ -170,7 +170,14 @@ const UserTab = ({
               )
             ) : (
               <ItemActionButton
-                onClick={() => onPurchase(currentUserId, selectedUser.id, id)}
+                onClick={() =>
+                  onPurchase(
+                    currentUserId,
+                    selectedUser.id,
+                    id,
+                    currentUserPurchasedItem,
+                  )
+                }
                 title="I got it!"
               >
                 <div>
