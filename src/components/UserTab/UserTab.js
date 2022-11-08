@@ -109,6 +109,7 @@ const UserTab = ({
   setSelectedUser,
   loading,
 }) => {
+  console.log(currentUserPurchasedItem, 'cupi')
   const usersList = ({ users }) => {
     return users.map((user) => {
       return (
@@ -175,7 +176,7 @@ const UserTab = ({
                     currentUserId,
                     selectedUser.id,
                     id,
-                    currentUserPurchasedItem,
+                    currentUserPurchasedItem[selectedUser.id],
                   )
                 }
                 title="I got it!"
