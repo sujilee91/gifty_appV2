@@ -109,7 +109,6 @@ const UserTab = ({
   setSelectedUser,
   loading,
 }) => {
-  console.log(currentUserPurchasedItem, 'cupi')
   const usersList = ({ users }) => {
     return users.map((user) => {
       return (
