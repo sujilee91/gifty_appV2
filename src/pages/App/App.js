@@ -6,12 +6,15 @@ import CurrentUser from '../../components/CurrentUser'
 import UserTab from '../../components/UserTab'
 import logo from '../../img/fullLogo.png'
 import Loader from '../../components/Loader'
+import Image from 'next/image'
+
 import {
   Button,
   AppWrapper,
   Header,
   CardsWrapper,
   HeaderWrapper,
+  Main,
 } from './styles'
 
 const App = () => {
@@ -91,7 +94,7 @@ const App = () => {
       ) : (
         <>
           <Header>
-            <img src={logo} />
+            <Image src={logo} width={80} />
             <HeaderWrapper>
               <h3>Hi, {currentUser?.name}!</h3>
               <Button onClick={() => onLogout()} primary>

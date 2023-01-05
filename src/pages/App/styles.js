@@ -14,6 +14,7 @@ export const HeaderWrapper = styled.div`
   align-items: center;
 `
 export const CardsWrapper = styled.div`
+  position: relative;
   padding: 20px 40px;
   max-width: 1100px;
   margin: auto;
@@ -22,18 +23,25 @@ export const CardsWrapper = styled.div`
   }
 `
 
-export const Header = styled.div`
-  position: sticky;
-  top: 0;
+export const Header = styled.section`
+  float: left;
+  z-index: 999;
+  left: 0;
   background: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 5px 20px;
+  height: 100vh;
+  width: 50px;
+  transition: 0.5s;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
 
-  img {
-    width: 80px;
+  :hover {
+    width: 250px;
   }
 
   @media only screen and (max-width: 728px) {
