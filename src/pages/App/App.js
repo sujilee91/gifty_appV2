@@ -11,7 +11,7 @@ import Image from 'next/image'
 import {
   Button,
   AppWrapper,
-  Header,
+  Sidebar,
   CardsWrapper,
   HeaderWrapper,
   Main,
@@ -93,7 +93,7 @@ const App = () => {
         />
       ) : (
         <>
-          <Header>
+          {/* <Sidebar>
             <Image src={logo} width={80} />
             <HeaderWrapper>
               <h3>Hi, {currentUser?.name}!</h3>
@@ -101,7 +101,7 @@ const App = () => {
                 Logout
               </Button>
             </HeaderWrapper>
-          </Header>
+          </Sidebar> */}
           <CardsWrapper>
             {currentUser || loading ? (
               <CurrentUser

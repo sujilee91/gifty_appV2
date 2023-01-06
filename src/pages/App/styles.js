@@ -23,7 +23,8 @@ export const CardsWrapper = styled.div`
   }
 `
 
-export const Header = styled.section`
+export const Sidebar = styled.section`
+  position: absolute;
   float: left;
   z-index: 999;
   left: 0;
