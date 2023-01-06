@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Modal from '../../components/Modal'
-import { useGetUsers } from './useGetUsers'
-import CurrentUser from '../../components/CurrentUser'
-import UserTab from '../../components/UserTab'
+import Modal from '../Modal'
+import useGetUsers from './useGetUsers'
+import CurrentUser from '../CurrentUser'
+import UserTab from '../UserTab'
 import logo from '../../img/fullLogo.png'
-import Loader from '../../components/Loader'
-import {
-  Button,
-  AppWrapper,
-  Header,
-  CardsWrapper,
-  HeaderWrapper,
-} from './styles'
+import Loader from '../Loader'
+import Image from 'next/image'
+import { GeneralButton } from '../styles'
 
+const AppWrapper = styled.div`
+  position: relative;
+  top: 0;
+  max-width: 100vw;
+  height: 100vh;
+`
+
+const CardsWrapper = styled.div`
+  position: relative;
+  padding: 20px 40px;
+  max-width: 1100px;
+  margin: auto;
+  @media only screen and (max-width: 728px) {
+    padding: 0 20px 20px 20px;
+  }
+`
 const App = () => {
   const [openModal, setOpenModal] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
@@ -90,15 +101,15 @@ const App = () => {
         />
       ) : (
         <>
-          <Header>
-            <img src={logo} />
+          {/* <Sidebar>
+            <Image src={logo} width={80} />
             <HeaderWrapper>
               <h3>Hi, {currentUser?.name}!</h3>
               <Button onClick={() => onLogout()} primary>
                 Logout
               </Button>
             </HeaderWrapper>
-          </Header>
+          </Sidebar> */}
           <CardsWrapper>
             {currentUser || loading ? (
               <CurrentUser

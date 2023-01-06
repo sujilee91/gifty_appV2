@@ -109,7 +109,6 @@ const UserTab = ({
   setSelectedUser,
   loading,
 }) => {
-  console.log(currentUserPurchasedItem, 'cupi')
   const usersList = ({ users }) => {
     return users.map((user) => {
       return (
@@ -144,7 +143,7 @@ const UserTab = ({
           </td>
           <td>${price ? price : 'N/A'}</td>
           <td>
-            <a href={link} target="_blank">
+            <a href={link} target="_blank" rel="noreferrer">
               {name ? name : 'N/A'}
             </a>
           </td>

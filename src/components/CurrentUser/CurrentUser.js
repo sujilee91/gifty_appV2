@@ -29,7 +29,6 @@ const CancelButton = styled(WarningButton)`
 `
 
 const CardWrapper = styled.div`
-  max-height: 20vh;
   overflow-y: auto;
 `
 
