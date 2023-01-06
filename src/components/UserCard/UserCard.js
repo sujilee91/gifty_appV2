@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { CardTitle, CardDetails } from './styles'
+import { Card, CardTitle, CardDetails } from './styles'
 import CardTable from '../CardTable'
 
 const UserCard = ({ user }) => {

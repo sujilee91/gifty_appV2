@@ -1,5 +1,11 @@
-import App from '../components/App'
+import Link from 'next/link'
+import Image from 'next/image'
 
+import App from '../components/App'
+import '../styles/global.css'
+import { Sidebar, HeaderWrapper, Button } from '../styles/styles'
+
+import logo from '../img/fullLogo.png'
 const Main = () => {
   return (
     <div>

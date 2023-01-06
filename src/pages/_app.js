@@ -1,11 +1,4 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
-
-import '../styles/global.css'
-import { Sidebar, HeaderWrapper, Button } from '../styles/styles'
-
-import logo from '../img/fullLogo.png'
 
 export default function MyApp({ Component, pageProps }) {
   return (
