@@ -19,30 +19,6 @@ export default function MyApp({ Component, pageProps }) {
         />
         <title>Gifty - Share your love, share your gift</title>
       </Head>
-
-      <Sidebar>
-        <Image src={logo} width={80} />
-        <HeaderWrapper>
-          <ul>
-            <li>
-              <Link href={'/groups'}>Groups</Link>
-            </li>
-            <li>
-              <Link href={'/wishlist'}>Wishlist</Link>
-            </li>
-            <li>
-              <Link href={'/friends'}>Friends</Link>
-            </li>
-            <li>
-              <Link href={'/profile'}>Profile</Link>
-            </li>
-          </ul>
-          {/* <h3>Hi, {currentUser?.name}!</h3> */}
-          <Button onClick={() => onLogout()} primary>
-            Logout
-          </Button>
-        </HeaderWrapper>
-      </Sidebar>
       <Component {...pageProps} />
     </div>
   )
