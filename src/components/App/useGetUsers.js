@@ -5,7 +5,7 @@ import { db } from '../../firebase'
 
 const dbRef = ref(getDatabase())
 
-export const useGetUsers = (initializeUser) => {
+const useGetUsers = (initializeUser) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -147,3 +147,5 @@ export const useGetUsers = (initializeUser) => {
     usePurchaseCheckItem,
   }
 }
+
+export default useGetUsers
