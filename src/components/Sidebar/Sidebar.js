@@ -24,7 +24,13 @@ const SidebarComponent = () => {
           </li>
         </ul>
         {/* <h3>Hi, {currentUser?.name}!</h3> */}
-        <Button onClick={() => onLogout()} primary>
+        <Button
+          onClick={() => {
+            localStorage.removeItem('code')
+            window.location.reload()
+          }}
+          primary
+        >
           Logout
         </Button>
       </HeaderWrapper>
