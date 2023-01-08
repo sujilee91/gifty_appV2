@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import Image from 'next/image'
+
 import logo from '../../img/fullLogo.png'
 import { onInputNumber } from '../../functions/onInputNumber'
 import { GeneralButton, red_dark } from '../styles'
@@ -150,7 +152,7 @@ const Modal = ({ loading, usersList, setCurrentUser, setOpenModal }) => {
       <ModalCard>
         <Content>
           <ContentHeader>
-            <Logo src={logo} />
+            <Image src={logo} width={150} />
             <h1>Welcome to Gifty 2022</h1>
             <div>
               {error ? (
